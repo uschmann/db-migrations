@@ -16,6 +16,7 @@ unzip -d /opt/oracle instantclient-sqlplus-linux.x64-21.4.0.0.0dbru.zip
 export LD_LIBRARY_PATH=/opt/oracle/instantclient_21_4
 export PATH=$LD_LIBRARY_PATH:$PATH
 
+
 # Ubuntu
 ln -s /usr/lib/x86_64-linux-gnu/libaio.so.1t64 /opt/oracle/instantclient_21_4/libaio.so.1
 ```

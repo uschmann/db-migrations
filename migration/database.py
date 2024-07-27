@@ -3,7 +3,6 @@ from sqlalchemy import create_engine
 
 user = config['database']['user']
 password = config['database']['password'] 
-dsn = config['database']['tns']
 host = config['database']['host']
 port = config['database']['port']
 service = config['database']['service']

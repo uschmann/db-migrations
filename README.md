@@ -4,7 +4,23 @@
 docker build . -t db-migrations
 ```
 
-# Run container
+# configure .env
 ```bash
-docker run -it --add-host=host.docker.internal:host-gateway pythontest sqlplus auschmann/secret@host.docker.internal:1522/FREE
+cp .env.example .env
+```
+
+# Run migrations
+```bash
+docker run -it --add-host=host.docker.internal:host-gateway --env-file ./.env db-migrations python migrate.py
+```
+
+# Rollback migrations
+```bash
+cp .env.example .env
+docker run -it --add-host=host.docker.internal:host-gateway --env-file ./.env db-migrations python migrate.py --rollback
+```
+
+# Run sql plus in container
+```bash
+docker run -it --add-host=host.docker.internal:host-gateway db-migrations sqlplus auschmann/secret@host.docker.internal:1522/FREE
 ```

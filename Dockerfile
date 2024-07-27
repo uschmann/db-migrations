@@ -14,4 +14,12 @@ RUN wget https://download.oracle.com/otn_software/linux/instantclient/214000/ins
 ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_21_4
 ENV PATH=$LD_LIBRARY_PATH:$PATH
 
-CMD ["echo", "Hello world"]
+RUN mkdir /app
+COPY ./requirements.txt /app
+
+WORKDIR /app
+RUN pip install -r requirements.txt
+
+COPY . /app
+
+CMD ["python", "migrate.py", "--help"]

@@ -1,16 +1,13 @@
 from sqlalchemy import text
 import re
+from .SqlPlus import execute_script
 
 class SqlFile():
     def __init__(self, filename) -> None:
         self.filename = filename
-        
-        with open(filename) as file:
-            self.statements = re.split(r';\s*$', file.read(), flags=re.MULTILINE)
     
     def execute(self, engine):
-        with engine.connect() as connection:
-            for statement in self.statements:
-                if statement:
-                    connection.execute(text(statement))
+        print(f'Running: {self.filename}')
+        output = execute_script(self.filename)
+        print(output)
     
