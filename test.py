@@ -3,7 +3,7 @@ from migration.MigrationLogRepository import MigrationLogRepository
 
 repo = MigrationLogRepository(engine)
 
-print(repo.get_next_batch())
-repo.delete_all_migration_logs()
+logs = repo.get_last_migration_logs()
 
-print(repo.get_next_batch())
+res = next(x for x in logs if x.name == 'foo')
+print(res)

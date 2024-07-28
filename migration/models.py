@@ -11,7 +11,7 @@ class MigrationLog(Base):
     __tablename__ = 'migration_logs'
      
     id: Mapped[int] = mapped_column(Identity(start=1), primary_key=True)
-    name: Mapped[str] = mapped_column(String(30))
+    name: Mapped[str] = mapped_column(String(256))
     batch: Mapped[int]
     
     def __repr__(self) -> str:
