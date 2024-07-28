@@ -3,8 +3,9 @@ import sys
 from .Migration import Migration 
 
 class MigrationManager():
-    def __init__(self, engine, basedir='sql'):
+    def __init__(self, engine, migrationLogRepository, basedir='sql'):
         self.engine = engine
+        self.migrationLogRepository = migrationLogRepository
         self.basedir = os.path.dirname(os.path.realpath(sys.argv[0])) + f'/{basedir}'
         self.migrations = []
         self.read_migrations()

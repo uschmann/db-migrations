@@ -1,5 +1,4 @@
 from migration.MigrationManager import MigrationManager
-from migration.Storage import Storage
 from migration.database import engine
 import click
 
@@ -7,7 +6,6 @@ import click
 @click.command()
 @click.option('--rollback/--no-rollback', default=False, help='Rollback the last batch')
 def migrate(rollback):
-   storage = Storage(engine)
    migrationManager = MigrationManager(engine)
    
    if(rollback == False):
