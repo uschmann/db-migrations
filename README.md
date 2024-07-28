@@ -9,9 +9,14 @@ docker build . -t db-migrations
 cp .env.example .env
 ```
 
-# Run migrations
+# Run migratione
 ```bash
-docker run -it --add-host=host.docker.internal:host-gateway --env-file ./.env db-migrations python migrate.py
+docker run --user $(id -u):$(id -g) --add-host=host.docker.internal:host-gateway --env-file ./.env -v ./sql:/app/sql db-migrations python app.py migrate
+```
+
+# Run container and mount app for development
+```bash
+docker run -it --user $(id -u):$(id -g) --add-host=host.docker.internal:host-gateway -v .:/app --env-file ./.env db-migrations bash
 ```
 
 # Rollback migrations

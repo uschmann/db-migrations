@@ -22,4 +22,4 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 
-CMD ["python", "migrate.py", "--help"]
+CMD ["python", "app.py", "--help"]
