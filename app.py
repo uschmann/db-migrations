@@ -4,6 +4,8 @@ from migration.MigrationLogRepository import MigrationLogRepository
 import click
 from migration.models import Base
 from migration.MigationGenerator import MigrationGenerator
+from rich.console import Console
+from rich.table import Table
 
 main = click.Group(help="Oracle schema manager")
 
@@ -32,6 +34,28 @@ def rollback():
 def make(name, t):
    generator = MigrationGenerator()
    generator.generate_migration(name, t)
+
+@main.command('status', help='Display a list of executed migrations')
+def status():
+   Base.metadata.create_all(engine, checkfirst=True)
+   
+   migrationLogRepository = MigrationLogRepository(engine)
+   migrationManager = MigrationManager(engine, migrationLogRepository)
+   
+   table = Table()
+   table.add_column("#", justify="right", style="cyan", no_wrap=True)
+   table.add_column("Name", style="magenta")
+   table.add_column("Batch", style="red", justify="center")
+   table.add_column("Executed?", justify="right", style="green")
+
+   count = 1
+   for migration in migrationManager.migrations:
+      batch = migrationLogRepository.get_batch_by_name(migration.name)
+      table.add_row(f'{count}', migration.name, f'[bold green]{batch}' if batch != None else '-', '[bold]Yes' if batch != None else '[red]No')
+      count += 1
+   
+   console = Console()
+   console.print(table)
 
 if __name__ == '__main__':
     main()

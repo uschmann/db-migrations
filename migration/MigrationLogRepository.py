@@ -29,6 +29,10 @@ class MigrationLogRepository():
             stmt = select(MigrationLog).where(MigrationLog.name == name)
             
             migrationLog = session.scalar(stmt)
+            
+            if(migrationLog == None):
+                return None
+            
             return migrationLog.batch
             
     def get_last_migration_logs(self):

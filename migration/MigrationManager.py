@@ -20,6 +20,8 @@ class MigrationManager():
                 migration = Migration(dir, self.basedir)
                 self.migrations.append(migration)
                 
+        return self.migrations
+                
     def run_up(self):
         batch = self.migrationLogRepository.get_last_batch() + 1
         
