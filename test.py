@@ -1,9 +1,5 @@
-from migration.database import engine
-from migration.MigrationLogRepository import MigrationLogRepository
+from datetime import datetime
 
-repo = MigrationLogRepository(engine)
-
-logs = repo.get_last_migration_logs()
-
-res = next(x for x in logs if x.name == 'foo')
-print(res)
+now = datetime.now()
+formatted = now.strftime("%Y_%m_%d_%H%M%S")
+print(formatted)
