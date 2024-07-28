@@ -16,7 +16,7 @@ docker run --user $(id -u):$(id -g) --add-host=host.docker.internal:host-gateway
 
 # Run container and mount app for development
 ```bash
-docker run -it --user $(id -u):$(id -g) --add-host=host.docker.internal:host-gateway -v .:/app --env-file ./.env db-migrations bash
+docker run -it --user $(id -u):$(id -g) --add-host=host.docker.internal:host-gateway -v .:/app --env-file ./.env --entrypoint bash db-migrations
 ```
 
 # Rollback migrations
