@@ -2,6 +2,7 @@ import os
 import sys
 from .Migration import Migration 
 from .MigrationLogRepository import MigrationLogRepository
+from .console import log_up, log_down, log_nothing_to_migrate
 
 class MigrationManager():
     def __init__(self, engine, migrationLogRepository: MigrationLogRepository, basedir='sql'):
@@ -25,17 +26,30 @@ class MigrationManager():
     def run_up(self):
         batch = self.migrationLogRepository.get_last_batch() + 1
         
+        migrationsToRun = []
         for migration in self.migrations:
             if(migration.has_up() and self.migrationLogRepository.is_migration_executed(migration.name) == False): 
+                migrationsToRun.append(migration)
+            
+        if(len(migrationsToRun) == 0):
+            log_nothing_to_migrate()
+            
+        for migration in migrationsToRun:
+            if(migration.has_up() and self.migrationLogRepository.is_migration_executed(migration.name) == False): 
+                log_up(migration)
                 migration.up.execute(self.engine)
                 self.migrationLogRepository.add_migration_log(migration.name, batch)
     
     def run_down(self):
         migrationLogs = self.migrationLogRepository.get_last_migration_logs()
         
+        if(len(migrationLogs) == 0):
+            log_nothing_to_migrate()
+        
         for migrationLog in migrationLogs:
             migration = next(x for x in self.migrations if x.name == migrationLog.name)
             
             if(migration.has_down()): 
+                log_down(migration)
                 migration.down.execute(self.engine)
                 self.migrationLogRepository.delete_migration_log_by_name(migration.name)

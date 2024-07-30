@@ -7,7 +7,5 @@ class SqlFile():
         self.filename = filename
     
     def execute(self, engine):
-        print(f'Running: {self.filename}')
         output = execute_script(self.filename)
-        print(output)
     
