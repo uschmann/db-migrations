@@ -1,6 +1,8 @@
 from .config import config
 import subprocess
-
+from .console import console
+import re
+from .SqlError import SqlError
 
 def execute_script(script):
     user = config['database']['user']
@@ -11,5 +13,11 @@ def execute_script(script):
     
     cmd = f'echo exit | sqlplus {user}/{password}@{host}:{port}/{service} @{script}'
     
-    return subprocess.getoutput(cmd)
+    process = subprocess.run(cmd, shell=True, capture_output=True)
+    
+    if process.returncode != 0:
+        output = process.stdout.decode()
+        raise SqlError(output)
+
+    return process
     

@@ -2,7 +2,9 @@ from datetime import datetime
 import os
 import sys
 
-up_template = """create table {0} (
+up_template = """whenever sqlerror exit sql.sqlcode;
+
+create table {0} (
     id number(19, 0) not null,
     created_at timestamp null,
     updated_at timestamp null,
@@ -21,7 +23,9 @@ end;
 /
 """
 
-down_template = """DROP TABLE {0};
+down_template = """whenever sqlerror exit sql.sqlcode;
+
+DROP TABLE {0};
 
 DROP SEQUENCE {0}_id_seq;
 """
@@ -39,8 +43,10 @@ class MigrationGenerator():
         os.mkdir(dir)
         
         if(table == None):
-            os.mknod(f'{dir}/up.sql')
-            os.mknod(f'{dir}/down.sql')
+            with open(f'{dir}/up.sql', "w") as text_file:
+                text_file.write('whenever sqlerror exit sql.sqlcode;\n')
+            with open(f'{dir}/down.sql', "w") as text_file:
+                text_file.write('whenever sqlerror exit sql.sqlcode;\n')
         else:
             with open(f'{dir}/up.sql', "w") as text_file:
                 text_file.write(up_template.format(table))

@@ -11,3 +11,6 @@ def log_up(migration):
     
 def log_down(migration):
     console.log(f'Rollback [red bold]{migration.name}')
+    
+def log_error(message):
+    console.log(f'[red]{message}')
