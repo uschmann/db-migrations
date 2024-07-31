@@ -6,6 +6,7 @@ from migration.models import Base
 from migration.MigationGenerator import MigrationGenerator
 from rich.console import Console
 from rich.table import Table
+from migration.console import console
 
 main = click.Group(help="Oracle schema manager")
 
@@ -54,7 +55,6 @@ def status():
       table.add_row(f'{count}', migration.name, f'[bold green]{batch}' if batch != None else '-', '[bold]Yes' if batch != None else '[red]No')
       count += 1
    
-   console = Console()
    console.print(table)
 
 if __name__ == '__main__':
