@@ -3,6 +3,8 @@ import subprocess
 from .console import console
 import re
 from .SqlError import SqlError
+from . import scripts_dir
+from os.path import join
 
 def execute_script(script):
     user = config['database']['user']
@@ -11,7 +13,9 @@ def execute_script(script):
     port = config['database']['port']
     service = config['database']['service']
     
-    cmd = f'echo exit | sqlplus {user}/{password}@{host}:{port}/{service} @{script}'
+    wrapper_script = join(scripts_dir, 'wrapper.sql')
+    
+    cmd = f'echo exit | sqlplus {user}/{password}@{host}:{port}/{service} @{wrapper_script} {script}'
     
     process = subprocess.run(cmd, shell=True, capture_output=True)
     

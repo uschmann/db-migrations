@@ -57,5 +57,27 @@ def status():
    
    console.print(table)
 
+@main.command('replay', help='Runs rollback and migrate in a row')
+def replay():
+   Base.metadata.create_all(engine, checkfirst=True)
+   
+   migrationLogRepository = MigrationLogRepository(engine)
+   migrationManager = MigrationManager(engine, migrationLogRepository)
+   
+   migrationManager.run_down()
+   migrationManager.run_up()
+
+@main.command('reset', help='Rollback all migrations and migrate everything from scratch')
+def reset():
+   Base.metadata.create_all(engine, checkfirst=True)
+
+   migrationLogRepository = MigrationLogRepository(engine)
+   migrationManager = MigrationManager(engine, migrationLogRepository)
+
+   while(migrationManager.run_down()):
+      pass
+   
+   migrationManager.run_up()
+
 if __name__ == '__main__':
     main()

@@ -34,6 +34,7 @@ class MigrationManager():
             
         if(len(migrationsToRun) == 0):
             log_nothing_to_migrate()
+            return False
             
         for migration in migrationsToRun:
             if(migration.has_up() and self.migrationLogRepository.is_migration_executed(migration.name) == False): 
@@ -45,12 +46,15 @@ class MigrationManager():
                     msg = error.args[0]
                     log_error(msg)
                     sys.exit(1)
+        
+        return True
     
     def run_down(self):
         migrationLogs = self.migrationLogRepository.get_last_migration_logs()
         
         if(len(migrationLogs) == 0):
             log_nothing_to_migrate()
+            return False
         
         for migrationLog in migrationLogs:
             migration = next(x for x in self.migrations if x.name == migrationLog.name)
@@ -64,3 +68,5 @@ class MigrationManager():
                     msg = error.args[0]
                     log_error(msg)
                     sys.exit(1)
+                    
+        return True
